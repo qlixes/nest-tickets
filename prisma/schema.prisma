@@ -1,0 +1,152 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+model Category {
+  id Int @id @default(autoincrement())
+  name String
+  ticket Ticket[]
+  @@map("categories")
+}
+
+model Role {
+  id Int @id @default(autoincrement())
+  name String @db.VarChar(191) @unique()
+  user User[]
+  ruler Ruler[]
+  isActive Boolean @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@map("roles")
+}
+
+model Permission {
+  id Int @id @default(autoincrement())
+  name String @db.VarChar(191) @unique()
+  ruler Ruler[]
+  isActive Boolean @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@map("permissions")
+}
+
+model Ruler {
+  id Int @id @default(autoincrement())
+  role Role @relation(fields: [roleId], references: [id])
+  roleId Int
+  permission Permission @relation(fields: [permissionId], references: [id])
+  permissionId Int
+  isActive Boolean @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@map("rulers")
+}
+
+model User {
+  id Int @id @default(autoincrement())
+  role Role @relation(fields: [roleId], references: [id])
+  roleId Int
+  name String @db.VarChar(191)
+  email String @db.VarChar(191) @unique()
+  password String @db.VarChar(191)
+  phone String @db.VarChar(16)
+  telegramId String @db.VarChar(191)
+  isActive Boolean @default(true)
+  ticket Ticket[]
+  log Log[]
+  comment Comment[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@map("users")
+}
+
+model Ticket {
+  id Int @id @default(autoincrement())
+  source Sources
+  user User @relation(fields: [userId], references: [id])
+  userId Int
+  category Category @relation(fields: [categoryId], references: [id])
+  categoryId Int
+  subject String @db.VarChar(191)
+  status Statuses
+  comment Comment[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("tickets")
+}
+
+model Attachment {
+  id Int @id @default(autoincrement())
+  file String @db.VarChar(191)
+  comment Comment @relation(fields:[commentId], references:[id])
+  commentId Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("attachments")
+}
+
+model Comment {
+  id Int @id @default(autoincrement())
+  ticket Ticket @relation(fields:[ticketId], references:[id])
+  ticketId Int
+  user User @relation(fields:[userId], references:[id])
+  userId Int
+  attachment Attachment[]
+  log Log[]
+  content String @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("comments")
+}
+
+model Log {
+  id Int @id @default(autoincrement())
+  logId Events
+  user User @relation(fields:[userId], references:[id])
+  userId Int
+  comment Comment @relation(fields:[commentId], references:[id])
+  commentId Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("logs")
+}
+
+enum Statuses {
+  OPEN
+  CLOSED
+  PENDING
+  PROCESS
+}
+
+enum Events {
+  SIGNUP
+  SIGNIN
+  FORGET
+  RESET
+  ASK
+  REPLY
+}
+
+enum Sources {
+  EMAIL
+  TICKET
+  CHAT
+  TELEGRAM
+  WHATSAPP
+}
