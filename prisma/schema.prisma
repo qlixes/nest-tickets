@@ -42,7 +42,7 @@ model Permission {
   @@map("permissions")
 }
 
-model Ruler {
+model Rule {
   id Int @id @default(autoincrement())
   role Role @relation(fields: [roleId], references: [id])
   roleId Int
@@ -51,7 +51,7 @@ model Ruler {
   isActive Boolean @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  @@map("rulers")
+  @@map("rules")
 }
 
 model User {
