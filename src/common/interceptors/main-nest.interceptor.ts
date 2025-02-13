@@ -1,4 +1,4 @@
-import { CallHandler, ExecutionContext, HttpException, HttpStatus, Injectable, NestInterceptor } from "@nestjs/common";
+import { BadRequestException, CallHandler, ExecutionContext, HttpException, HttpStatus, Injectable, NestInterceptor } from "@nestjs/common";
 import { Observable, throwError } from "rxjs";
 import { catchError, map } from 'rxjs/operators';
 
@@ -17,7 +17,7 @@ export class MainNestInterceptor<T> implements NestInterceptor<T, Response<T>> {
                     map((res: unknown) => this.responseHandler(res, context)),
                     catchError((err: HttpException) =>
                       throwError(() => this.errorHandler(err, context)),
-                    ),              
+                    ),
                 );
     }
 
