@@ -4,15 +4,15 @@ export class UserDto {
     
     @IsNotEmpty()
     @IsNumber()
-    roleId: number;
+    readonly role_id: number;
 
     @IsNotEmpty()
     @IsString()
-    name: string;
+    readonly name: string;
 
     @IsNotEmpty()
     @IsEmail()
-    email: string;
+    readonly email: string;
 
     @IsNotEmpty()
     @IsStrongPassword({
@@ -21,13 +21,13 @@ export class UserDto {
         minNumbers: 1,
         minSymbols: 1
     })
-    password: string;
+    readonly password: string;
 
     @IsNotEmpty()
     @IsNumberString()
-    phone: string;
+    readonly phone: string;
 
     @IsNotEmpty()
     @IsString()
-    telegramId: string;
+    readonly telegram_id: string;
 }
