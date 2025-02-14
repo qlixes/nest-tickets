@@ -7,11 +7,10 @@ export class BadRequestFilter implements ExceptionFilter {
         const ctx = host.switchToHttp();
         const response = ctx.getResponse<Response>();
         const request = ctx.getRequest<Request>();
-        const status = exception.getStatus();
 
-        response.status(status).json({
+        response.status(400).json({
             code: "111",
-            message: exception.message,
+            message: "Missing Parameter",
         });
     }
 }
