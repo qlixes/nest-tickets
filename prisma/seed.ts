@@ -3,7 +3,23 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 async function main() {
+  const developer = await prisma.role.create({
+    data: {
+      name: "developer",
+    },
+  });
 
+  const admin = await prisma.role.create({
+    data: {
+      name: "admin",
+    },
+  });
+
+  const merchant = await prisma.role.create({
+    data: {
+      name: "merchant",
+    },
+  });
 }
 
 main()
