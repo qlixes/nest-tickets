@@ -1,47 +1,29 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
-import { User } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import { PrismaService } from "src/common/prisma/prisma.service";
 
 @Injectable()
 export class UserRepository {
     constructor(private prisma: PrismaService) {}
 
-    async find(email: string): Promise<User> {
-        let user = await this.prisma.user.findFirst({
+    async findOne(id: number): Promise<User | null> {
+        let user = await this.prisma.user.findUnique({
             where: {
-                email: email,
+                id: id
             }
         });
 
         return user;
     }
 
-    async create(params: any): Promise<User> {
-        let user = await this.prisma.user.create({
-            data: params,
-        });
-
-        return user;
+    async findPaginate(filter: any, property: {
+        page?: number,
+        limit?: number
+    }) {
+        let query: Prisma.UserFindManyArgs = {
+            where: filter
+        };
     }
 
-    async update(id: number, params: any) {
-        let user = await this.prisma.user.update({
-            where: {
-                id: id,
-            },
-            data: {
-
-            },
-        });
-
-        return user;
-    }
-
-    async delete(id: number) {
-        let user = await this.prisma.user.delete({
-            where: {
-                id: id,
-            }
-        });
-    }
+    async findMany() {}
 }

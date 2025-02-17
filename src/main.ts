@@ -4,11 +4,11 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
 import { ValidationPipe } from '@nestjs/common';
 import { MainNestInterceptor } from './common/interceptors/main-nest.interceptor';
-import { BadRequestFilter } from './common/filters/bad-request.filter';
+import { BadRequest } from './common/filters/bad-request.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
-    logger: ["error", "fatal"],
+    logger: ["error", "fatal", "warn"],
   });
 
   app.useGlobalPipes(new ValidationPipe({
@@ -18,7 +18,7 @@ async function bootstrap() {
   }));
 
   app.useGlobalInterceptors(new MainNestInterceptor());
-  app.useGlobalFilters(new BadRequestFilter());
+  app.useGlobalFilters(new BadRequest());
 
   app.useStaticAssets(join(__dirname, '..', 'public'));
   app.setBaseViewsDir(join(__dirname, '..', 'views'));
@@ -26,4 +26,5 @@ async function bootstrap() {
 
   await app.listen(process.env.PORT ?? 3000);
 }
+
 bootstrap();
