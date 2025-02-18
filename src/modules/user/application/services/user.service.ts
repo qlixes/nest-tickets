@@ -6,5 +6,7 @@ import * as bcrypt from 'bcrypt';
 export class UserService {
   constructor(private readonly repository: UserRepository) {}
 
-  
+  async show() {
+    return this.repository.findPaginate();
+  }
 }

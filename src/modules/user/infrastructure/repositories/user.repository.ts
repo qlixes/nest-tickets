@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
-import { Prisma } from "@prisma/client";
+import { Prisma, User } from "@prisma/client";
 import { PrismaService } from "src/common/prisma/prisma.service";
 
 @Injectable()
@@ -16,14 +16,50 @@ export class UserRepository {
         return user;
     }
 
-    async findPaginate(filter: any, property: {
+    async findPaginate(filter?: any, property?: {
+        page?: number,
+        limit?: number,
+    }) {
+        let skip = property?.page ?? 1;
+        let take = property?.limit ?? 10;
+
+        let users = await this.prisma.user.findMany({
+            where: filter, 
+            include: {
+                role: true,
+            },
+        });
+
+        const format = users.map(user => ({
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            role: user.role.name,
+            phone: user.phone,
+            telegram_id: user.telegramId,
+            is_active: user.isActive,
+        }));
+
+        return format;
+    }
+
+    async findMany(filter: any, property: {
         page?: number,
         limit?: number
     }) {
-        let query: Prisma.UserFindManyArgs = {
-            where: filter
-        };
+        let skip = property?.page ?? 1;
+        let take = property?.limit ?? 10;
+
+        let user = this.prisma.user.findMany({
+            where: filter, 
+            take: take,
+            skip: skip,
+        });
+
+        return user;
     }
 
-    async findMany() {}
+    async update(id: number, data: {
+
+    }) {}
 }
