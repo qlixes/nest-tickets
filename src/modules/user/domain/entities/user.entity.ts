@@ -1,12 +1,10 @@
 export class UserEntity {
-    constructor(
-        public readonly id: string,
-        public readonly roleId: number,
-        public readonly name: string,
-        public readonly email: string,
-        public readonly phone: string,
-        public readonly telegramId: string,
-        public readonly isActive: boolean,
-        public readonly createdAt: Date
-    ) {}
+    id: string;
+    role: string;
+    name: string;
+    email: string;
+    phone: string;
+    telegramId: string;
+    isActive: boolean;
+    createdAt: Date;
 }
