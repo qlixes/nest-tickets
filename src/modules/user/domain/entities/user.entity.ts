@@ -17,6 +17,9 @@ export class UserEntity {
     @Expose()
     phone: string;
 
+    @Exclude()
+    password: string;
+
     @Expose({ name: "telegram_id" })
     telegramId: string;
 

@@ -7,21 +7,9 @@ export class UserRepository {
 
   constructor(private readonly prisma: PrismaService) {}
 
-  async findId(property: {
-    id: number,
-  }) {
-    const user = await this.prisma.user.findFirst({
-      where: property,
-      select: {
-        role: true
-      },
-    });
-
-    return new UserEntity(user);
-  }
-
   async findOne(property: {
-    email: string,
+    id?: number,
+    email?: string,
   }) {
     const user = await this.prisma.user.findFirst({
       where: property,
