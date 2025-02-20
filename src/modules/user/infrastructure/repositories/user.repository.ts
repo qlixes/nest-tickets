@@ -10,7 +10,7 @@ export class UserRepository {
   async findId(property: {
     id: number,
   }) {
-    const user = await this.prisma.user.findUnique({
+    const user = await this.prisma.user.findFirst({
       where: property,
       select: {
         role: true
@@ -23,7 +23,7 @@ export class UserRepository {
   async findOne(property: {
     email: string,
   }) {
-    const user = await this.prisma.user.findUnique({
+    const user = await this.prisma.user.findFirst({
       where: property,
       select: {
         role: true
@@ -80,6 +80,7 @@ export class UserRepository {
   async delete(id: number): Promise<void> {}
 
   async store(data: any) {
+
     const user = await this.prisma.user.create({
       data: data,
       include: {

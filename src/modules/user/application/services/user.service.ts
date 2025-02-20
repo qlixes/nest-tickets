@@ -1,6 +1,7 @@
 import { ClassSerializerInterceptor, Injectable, UseInterceptors } from '@nestjs/common';
 import { UserRepository } from '../../infrastructure/repositories/user.repository';
 import { DuplicateDataException } from 'src/common/exceptions/duplicate-data.exception';
+import * as bcrypt from 'bcrypt';
 
 @UseInterceptors(ClassSerializerInterceptor)
 @Injectable()
@@ -18,6 +19,12 @@ export class UserService {
       throw new DuplicateDataException();
     }
 
-    return this.repository.store(user);
+    const salt = await bcrypt.genSalt();
+    const password = await bcrypt.hash(user.password, salt);
+
+    return this.repository.store({
+      ...user,
+      password: password,
+    });
   }
 }
