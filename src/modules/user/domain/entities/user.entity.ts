@@ -5,6 +5,9 @@ export class UserEntity {
     @Expose()
     id: number;
 
+    @Exclude()
+    roleId: number;
+
     @Expose()
     name: string;
 

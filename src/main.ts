@@ -7,9 +7,7 @@ import { BadRequest } from './common/filters/bad-request.filter';
 import { ResponseHandlerInterceptor } from './common/interceptors/response-handler.interceptor';
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
-    logger: ["error", "fatal", "warn"],
-  });
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   app.useGlobalPipes(new ValidationPipe({
     forbidUnknownValues: true,
