@@ -9,4 +9,8 @@ export class UserService {
   async show() {
     return this.repository.findPaginate();
   }
+
+  async store(user: any) {
+    return this.repository.store(user);
+  }
 }

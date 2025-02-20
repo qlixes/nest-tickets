@@ -20,7 +20,7 @@ export class AppController {
 
   @Post('user/store')
   async postUser(@Body() dto: CreateUserDto) {
-
+    return this.user.store(dto);
   }
 
   @Post('user/update')

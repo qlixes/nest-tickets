@@ -1,10 +1,12 @@
+import { Expose } from "class-transformer";
 import { IsBoolean, IsEmail, IsEmpty, IsNotEmpty, IsNumber, IsNumberString, IsString, IsStrongPassword } from "class-validator";
 
 export class CreateUserDto {
     
+    @Expose({ name: "role_id" })
     @IsNotEmpty()
     @IsNumber()
-    readonly role_id: number;
+    readonly roleId: number;
 
     @IsNotEmpty()
     @IsString()
@@ -27,7 +29,8 @@ export class CreateUserDto {
     @IsNumberString()
     readonly phone: string;
 
+    @Expose({ name: "telegram_id" })
     @IsNotEmpty()
     @IsString()
-    readonly telegram_id: string;
+    readonly telegramId: string;
 }
