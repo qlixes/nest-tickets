@@ -3,8 +3,8 @@ import { AppModule } from './app.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
 import { ValidationPipe } from '@nestjs/common';
-import { MainNestInterceptor } from './common/interceptors/main-nest.interceptor';
 import { BadRequest } from './common/filters/bad-request.filter';
+import { ResponseHandlerInterceptor } from './common/interceptors/response-handler.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
@@ -17,7 +17,7 @@ async function bootstrap() {
     transform: true
   }));
 
-  app.useGlobalInterceptors(new MainNestInterceptor());
+  app.useGlobalInterceptors(new ResponseHandlerInterceptor());
   app.useGlobalFilters(new BadRequest());
 
   app.useStaticAssets(join(__dirname, '..', 'public'));

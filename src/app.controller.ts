@@ -1,7 +1,8 @@
-import { Controller, Post, UseFilters } from '@nestjs/common';
+import { Body, Controller, Post, UseFilters } from '@nestjs/common';
 import { UserService } from './modules/user/application/services/user.service';
 import { RoleService } from './modules/role/application/services/role.service';
 import { BadRequest } from './common/filters/bad-request.filter';
+import { CreateUserDto } from './modules/user/application/dto/create-user.dto';
 
 @Controller()
 export class AppController {

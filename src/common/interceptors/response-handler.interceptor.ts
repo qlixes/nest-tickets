@@ -9,7 +9,7 @@ export type Response<T> = {
 }
 
 @Injectable()
-export class MainNestInterceptor<T> implements NestInterceptor<T, Response<T>> {
+export class ResponseHandlerInterceptor<T> implements NestInterceptor<T, Response<T>> {
     intercept(context: ExecutionContext, next: CallHandler<any>): Observable<any> | Promise<Observable<any>> {
         return next
                 .handle()
