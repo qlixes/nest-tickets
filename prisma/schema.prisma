@@ -25,32 +25,9 @@ model Role {
   id Int @id @default(autoincrement())
   name String @db.VarChar(191) @unique()
   user User[]
-  ruler Rule[]
   isActive Boolean @default(true)
   createdAt DateTime @default(now())
   @@map("roles")
-}
-
-model Permission {
-  id Int @id @default(autoincrement())
-  name String @db.VarChar(191) @unique()
-  ruler Rule[]
-  isActive Boolean @default(true)
-  createdAt DateTime @default(now())
-  @@map("permissions")
-  @@index([name])
-}
-
-model Rule {
-  id Int @id @default(autoincrement())
-  role Role @relation(fields: [roleId], references: [id])
-  roleId Int
-  permission Permission @relation(fields: [permissionId], references: [id])
-  permissionId Int
-  isActive Boolean @default(true)
-  createdAt DateTime @default(now())
-  @@map("rules")
-  @@unique([roleId, permissionId])
 }
 
 model User {
