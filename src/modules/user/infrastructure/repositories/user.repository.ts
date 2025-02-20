@@ -1,24 +1,23 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { UserEntity } from '../../domain/entities/user.entity';
-import { BaseRepository } from 'src/common/repository/base.repository';
 import { PrismaService } from 'src/common/prisma/prisma.service';
 
 @Injectable()
-export class UserRepository extends BaseRepository{
+export class UserRepository {
 
-  constructor(prisma: PrismaService) {
-    super();
-    this.model = prisma.user;
-  }
+  constructor(private readonly prisma: PrismaService) {}
 
-  async findOne(id: number): Promise<UserEntity | null> {
+  async findOne(id: number) {
     const user = await this.prisma.user.findUnique({
       where: {
         id: id,
       },
+      select: {
+        role: true
+      },
     });
 
-    return user;
+    return new UserEntity(user);
   }
 
   async findPaginate(
@@ -27,9 +26,10 @@ export class UserRepository extends BaseRepository{
       page: number;
       limit: number;
     },
-  ): Promise<UserEntity[]> {
-    const index = property?.page ?? 1;
-    const rows = property?.limit ?? 10;
+  ) {
+
+    const skip = property?.page ?? 1;
+    const take = property?.limit ?? 10;
 
     const users = await this.prisma.user.findMany({
       where: filter,
@@ -38,7 +38,7 @@ export class UserRepository extends BaseRepository{
       },
     });
 
-    return users;
+    return users.map((user) => new UserEntity(user));
   }
 
   async findMany(
@@ -48,6 +48,7 @@ export class UserRepository extends BaseRepository{
       limit?: number;
     },
   ) {
+
     const skip = property?.page ?? 1;
     const take = property?.limit ?? 10;
 
@@ -55,6 +56,11 @@ export class UserRepository extends BaseRepository{
       where: filter,
       take: take,
       skip: skip,
+      // include: {
+      //   role: true,
+      //   ticket: true,
+      //   comment: true,
+      // },
     });
 
     return user;
@@ -63,4 +69,12 @@ export class UserRepository extends BaseRepository{
   async update(id: number, data: any): Promise<void> {}
 
   async delete(id: number): Promise<void> {}
+
+  async store(user: any) {
+    const users = await this.prisma.user.create({
+      data: user,
+    });
+
+    return users;
+  }
 }
