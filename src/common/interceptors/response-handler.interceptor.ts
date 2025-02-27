@@ -12,13 +12,13 @@ export type Response<T> = {
 export class ResponseHandlerInterceptor<T> implements NestInterceptor<T, Response<T>> {
     intercept(context: ExecutionContext, next: CallHandler<any>): Observable<any> | Promise<Observable<any>> {
         return next
-                .handle()
-                .pipe(
-                    map((res: unknown) => this.responseHandler(res, context)),
-                    catchError((err: HttpException) =>
-                      throwError(() => this.errorHandler(err, context)),
-                    ),
-                );
+            .handle()
+            .pipe(
+                map((res: unknown) => this.responseHandler(res, context)),
+                catchError((err: HttpException) =>
+                    throwError(() => this.errorHandler(err, context)),
+                ),
+            );
     }
 
     errorHandler(exception: HttpException, context: ExecutionContext) {
