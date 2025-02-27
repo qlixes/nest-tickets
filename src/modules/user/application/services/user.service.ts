@@ -10,34 +10,40 @@ import { UserEntity } from '../../domain/entities/user.entity';
 export class UserService {
   constructor(private readonly repository: UserRepository) {}
 
-  async show(property: {
-    
-  }): Promise<UserEntity[]> {
-    const users =  await this.repository.findMany();
+  async showOne(property: {
+    id?: number,
+    email?: string,
+  }): Promise<UserEntity> {
 
-    return users.map((user) => new UserEntity(user))
+    const user =  await this.repository.findOne(property);
+
+    return new UserEntity(user);
   }
 
-  async store(user: any): Promise<UserEntity> {
+  async showMany(): Promise<UserEntity[]> {
+    const users = await this.repository.findMany()
 
-    const filter = _.pick(user, ["email"]);
-
-    const users = await this.repository.findOne(filter);
-
-    if(!_.isNull(users)) {
-      throw new DuplicateDataException();
-    }
-
-    const salt = await bcrypt.genSalt();
-    const password = await bcrypt.hash(user.password, salt);
-
-    const store = await this.repository.store({
-      ...user,
-      password: password,
-    });
-
-    return new UserEntity(store);
+    return users.map((user) => new UserEntity(user));
   }
 
-  async 
+  // async store(user: any): Promise<UserEntity> {
+
+  //   const filter = _.pick(user, ["email"]);
+
+  //   const users = await this.repository.findOne(filter);
+
+  //   if(!_.isNull(users)) {
+  //     throw new DuplicateDataException();
+  //   }
+
+  //   const salt = await bcrypt.genSalt();
+  //   const password = await bcrypt.hash(user.password, salt);
+
+  //   const store = await this.repository.store({
+  //     ...user,
+  //     password: password,
+  //   });
+
+  //   return new UserEntity(store);
+  // }
 }

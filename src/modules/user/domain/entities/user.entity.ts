@@ -1,5 +1,6 @@
 import { Exclude, Expose, Type } from "class-transformer";
 import { RoleEntity } from "src/modules/role/domain/entities/role.entity";
+import * as moment from 'moment';
 
 export class UserEntity {
     @Expose()
@@ -26,8 +27,13 @@ export class UserEntity {
     @Expose({ name: "is_active" })
     isActive: boolean;
 
-    @Expose({ name: "created_at" })
+    @Exclude()
     createdAt: Date;
+
+    @Expose({ name: "created_at" })
+    get created(): string {
+        return moment(this.createdAt).format('YYYY-MM-DD HH:mm:ss');
+    }
 
     @Exclude()
     @Type(() => RoleEntity)

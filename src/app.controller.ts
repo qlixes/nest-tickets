@@ -5,27 +5,27 @@ import { CreateUserDto } from './modules/user/application/dto/create-user.dto';
 
 @Controller()
 export class AppController {
-  constructor(
-    private readonly user: UserService,
-  ) {}
+  // constructor(
+  //   private readonly user: UserService,
+  // ) {}
 
-  @Post('user/login')
-  @UseFilters(BadRequest)
-  async getUser() {
-    return this.user.show();
-  }
+  // @Post('user/login')
+  // @UseFilters(BadRequest)
+  // async getUser() {
+  //   return this.user.show();
+  // }
 
-  @Post('user/list')
-  async getUsers() {}
+  // @Post('user/list')
+  // async getUsers() {}
 
-  @Post('user/store')
-  async postUser(@Body() dto: CreateUserDto) {
-    return this.user.store(dto);
-  }
+  // @Post('user/store')
+  // async postUser(@Body() dto: CreateUserDto) {
+  //   return this.user.store(dto);
+  // }
 
-  @Post('user/update')
-  async patchUser() {}
+  // @Post('user/update')
+  // async patchUser() {}
 
-  @Post('user/remove')
-  async deleteUser() {}
+  // @Post('user/remove')
+  // async deleteUser() {}
 }

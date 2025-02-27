@@ -21,27 +21,66 @@ export class UserRepository {
     return user;
   }
 
-  async findMany(
-    params: {
-      page?: number;
-      limit?: number;
-      where?: {
-
-      }
-      orderBy?: {
-
-      }
-    },
-  ) {
+  async findMany() {
 
     const users = await this.prisma.user.findMany({
-      where: filter,
       include: {
         role: true,
       },
-    });
+      // where: {
+      //   OR: [
+      //     {
+      //       email: {
+      //         contains: params.search,
+      //       }
+      //     },
+      //     {
+      //       name: {
+      //         contains: params.search,
+      //       },
+      //     },
+      //     {
+      //       name: {
+      //         contains: params.search,
+      //       },
+      //     },
+      //   ],
+      // },
+    }); 
 
     return users;
+  }
+
+  async findPaginate(params: {
+    limit?: number,
+    page?: number,
+    search?: string,
+  }) {
+
+    const users = await this.prisma.user.findMany({
+      include: {
+        _count: true,
+      },
+      where: {
+        OR: [
+          {
+            email: {
+              contains: params.search,
+            }
+          },
+          {
+            name: {
+              contains: params.search,
+            },
+          },
+          {
+            name: {
+              contains: params.search,
+            },
+          },
+        ],
+      },
+    });
   }
 
   async update(id: number, data: any): Promise<void> {}
