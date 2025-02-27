@@ -21,45 +21,15 @@ export class UserRepository {
     return user;
   }
 
-  async findMany() {
-
-    const users = await this.prisma.user.findMany({
-      include: {
-        role: true,
-      },
-      // where: {
-      //   OR: [
-      //     {
-      //       email: {
-      //         contains: params.search,
-      //       }
-      //     },
-      //     {
-      //       name: {
-      //         contains: params.search,
-      //       },
-      //     },
-      //     {
-      //       name: {
-      //         contains: params.search,
-      //       },
-      //     },
-      //   ],
-      // },
-    }); 
-
-    return users;
-  }
-
-  async findPaginate(params: {
-    limit?: number,
+  async findMany(params: {
     page?: number,
+    limit?: number,
     search?: string,
   }) {
 
     const users = await this.prisma.user.findMany({
       include: {
-        _count: true,
+        role: true,
       },
       where: {
         OR: [
@@ -73,14 +43,11 @@ export class UserRepository {
               contains: params.search,
             },
           },
-          {
-            name: {
-              contains: params.search,
-            },
-          },
         ],
       },
-    });
+    }); 
+
+    return users;
   }
 
   async update(id: number, data: any): Promise<void> {}

@@ -12,7 +12,7 @@ export class UserService {
 
   async showOne(property: {
     id?: number,
-    email?: string,
+    search?: string,
   }): Promise<UserEntity> {
 
     const user =  await this.repository.findOne(property);
@@ -20,8 +20,10 @@ export class UserService {
     return new UserEntity(user);
   }
 
-  async showMany(): Promise<UserEntity[]> {
-    const users = await this.repository.findMany()
+  async showMany(params: {
+    search?: string,
+  }): Promise<UserEntity[]> {
+    const users = await this.repository.findMany(params);
 
     return users.map((user) => new UserEntity(user));
   }
