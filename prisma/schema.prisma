@@ -25,33 +25,9 @@ model Role {
   id Int @id @default(autoincrement())
   name String @db.VarChar(191) @unique()
   user User[]
-  ruler Ruler[]
   isActive Boolean @default(true)
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
   @@map("roles")
-}
-
-model Permission {
-  id Int @id @default(autoincrement())
-  name String @db.VarChar(191) @unique()
-  ruler Ruler[]
-  isActive Boolean @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  @@map("permissions")
-}
-
-model Ruler {
-  id Int @id @default(autoincrement())
-  role Role @relation(fields: [roleId], references: [id])
-  roleId Int
-  permission Permission @relation(fields: [permissionId], references: [id])
-  permissionId Int
-  isActive Boolean @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  @@map("rulers")
 }
 
 model User {
@@ -68,8 +44,8 @@ model User {
   log Log[]
   comment Comment[]
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
   @@map("users")
+  @@index([email])
 }
 
 model Ticket {
@@ -83,9 +59,9 @@ model Ticket {
   status Statuses
   comment Comment[]
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 
   @@map("tickets")
+  @@index([userId, categoryId])
 }
 
 model Attachment {
@@ -94,9 +70,9 @@ model Attachment {
   comment Comment @relation(fields:[commentId], references:[id])
   commentId Int
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 
   @@map("attachments")
+  @@index([file])
 }
 
 model Comment {
@@ -109,9 +85,9 @@ model Comment {
   log Log[]
   content String @db.Text
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 
   @@map("comments")
+  @@index([ticketId, userId])
 }
 
 model Log {
@@ -122,7 +98,6 @@ model Log {
   comment Comment @relation(fields:[commentId], references:[id])
   commentId Int
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 
   @@map("logs")
 }

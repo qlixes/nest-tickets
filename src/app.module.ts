@@ -1,11 +1,13 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { PrismaModule } from './application/module/prisma.module';
+import { PrismaModule } from './common/prisma/prisma.module';
+import { UserModule } from './modules/user/user.module';
+import { AuthModule } from './modules/auth/auth.module';
+import { RedisModule } from 'nestjs-redis';
+import { CacheModule } from '@nestjs/cache-manager';
 
 @Module({
-  imports: [PrismaModule],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [PrismaModule, UserModule, AuthModule, RedisModule, CacheModule.registerAsync({}), CacheModule.register({ isGlobal: true})],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}
