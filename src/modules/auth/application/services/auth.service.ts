@@ -2,7 +2,8 @@ import { ClassSerializerInterceptor, Injectable, UseInterceptors } from '@nestjs
 import * as bcrypt from 'bcrypt';
 import * as _ from 'lodash';
 import { AuthRepository } from '../../infrastructure/repositories/auth.repository';
-import { AuthEntity } from '../../domain/entities/auth.entity';
+import { EmptyDataException } from 'src/common/exceptions/empty-data.exception';
+import { InvalidDataException } from 'src/common/exceptions/invalid-data.exception';
 
 @UseInterceptors(ClassSerializerInterceptor)
 @Injectable()
@@ -14,8 +15,22 @@ export class AuthService {
     password: string,
   }) {
 
-    // const auth =  await this.repository.findOne(params.email);
+    const user =  await this.repository.findOne(params.email);
 
-    // return new AuthEntity(auth);
+    if(! user) {
+      throw new EmptyDataException();
+    }
+
+    const incorrectPassword = await bcrypt.compare(params.password, user.password);
+
+    if(! incorrectPassword) {
+      throw new InvalidDataException();
+    }
+
+    // add authCode
+    // user.authCode = "token";
+
+    return user;
   }
 }
+

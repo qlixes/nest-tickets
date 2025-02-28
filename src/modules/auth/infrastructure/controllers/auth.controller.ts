@@ -10,6 +10,6 @@ export class AuthController {
     @Post()
     @UseFilters(BadRequest)
     auth(@Body() dto: AuthDto) {
-        console.log(dto);
+        return this.service.auth(dto);
     }
 }

@@ -1,22 +1,23 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/common/prisma/prisma.service';
+import { AuthEntity } from '../../domain/entities/auth.entity';
 
 @Injectable()
 export class AuthRepository {
 
   constructor(private readonly prisma: PrismaService) {}
 
-  async findOne(email: string) {
+  async findOne(email: string): Promise<AuthEntity> {
     const user = await this.prisma.user.findFirst({
       where: {
         email: email,
       },
-      select: {
+      include: {
         role: true
       },
     });
 
-    return user;
+    return new AuthEntity(user);
   }
 }

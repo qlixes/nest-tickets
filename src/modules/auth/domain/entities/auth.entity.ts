@@ -27,6 +27,9 @@ export class AuthEntity {
     @Expose({ name: "is_active" })
     isActive: boolean;
 
+    @Expose()
+    authCode: string;
+
     @Exclude()
     createdAt: Date;
 
